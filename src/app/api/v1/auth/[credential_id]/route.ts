@@ -4,12 +4,11 @@ import bcrypt from "bcryptjs";
 import { JWT_SECRET, VERIFYER } from "@/config";
 import { SignJWT } from "jose";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { credential_id: string } }
-) {
+export async function GET(request: Request, context: any) {
+  // your code
+
   try {
-    const credId = params.credential_id;
+    const credId = await context.params.credential_id;
     if (credId !== VERIFYER) {
       throw new Error("User access blocked due to not providing a valid URL ");
     }
@@ -20,7 +19,7 @@ export async function GET(
       .setExpirationTime("1h") // token expires in 1 hour
       .sign(JWT_SECRET);
 
-    const response = NextResponse.redirect(new URL("/", req.url));
+    const response = NextResponse.redirect(new URL("/", request.url));
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: true,

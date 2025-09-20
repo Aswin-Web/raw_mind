@@ -1,11 +1,8 @@
 import prisma from "@/lib/prisma";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { file_id: string } }
-) {
+export async function GET(req: Request, context: any) {
   try {
-    const fileId = params.file_id; // this is your slug
+    const fileId = await context.params.file_id; // this is your slug
 
     const history = await prisma.fileConfig.findUnique({
       where: {

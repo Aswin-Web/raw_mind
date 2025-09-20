@@ -1,11 +1,8 @@
 import prisma from "@/lib/prisma";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { version_id: string } }
-) {
+export async function GET(req: Request, context: any) {
   try {
-    const versionId = await params.version_id; // this is your slug
+    const versionId = context.params.version_id; // this is your slug
 
     const history = await prisma.fileConfig.findMany({
       where: {
@@ -16,7 +13,7 @@ export async function GET(
       },
       select: {
         internal_file_name: true,
-        orignal_file_name: true, 
+        orignal_file_name: true,
         id: true,
         created_at: true,
         // meaning_ful_data: true,
