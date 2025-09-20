@@ -1,0 +1,20 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // e.g. postgres://user:password@localhost:5432/dbname
+}
+model FileConfig {
+  id Int @default(autoincrement()) @id
+  version String @default("v1")
+  orignal_file_name String
+  internal_file_name String
+  raw_data String? @db.Text
+  meaning_ful_data String? @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
