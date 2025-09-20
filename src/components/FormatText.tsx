@@ -7,33 +7,58 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+function MarkdownToHtml(rawText: string) {
+  // Split the text into lines
+  const lines = rawText.split("\n");
+
+  return (
+    <div>
+      {lines.map((line, index) => {
+        line = line.trim();
+
+        // Headers
+        if (line.startsWith("### "))
+          return (
+            <h3 className="text-xl my-2  font-bold" key={index}>
+              {line.slice(4)}
+            </h3>
+          );
+        if (line.startsWith("## "))
+          return (
+            <h2 className="text-2xl my-2  font-bold" key={index}>
+              {line.slice(3)}
+            </h2>
+          );
+        if (line.startsWith("# "))
+          return (
+            <h1 className="text-4xl my-2 font-bold" key={index}>
+              {line.slice(2)}
+            </h1>
+          );
+
+        // Bold text
+        const parts = line.split(/(\*\*.*?\*\*)/g).map((part, i) => {
+          if (part.startsWith("**") && part.endsWith("**")) {
+            return (
+              <strong className="font-extrabold" key={i}>
+                {part.slice(2, -2)}
+              </strong>
+            );
+          }
+          return part;
+        });
+
+        // Paragraphs
+        return <p key={index}>{parts}</p>;
+      })}
+    </div>
+  );
+}
+
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
-    <div className="max-w-4xl mx-auto p-6  shadow-md rounded-md prose prose-gray">
-      <ReactMarkdown
-        components={{
-          h1: ({ node, ...props }) => (
-            <h1 className="text-4xl font-bold my-4" {...props} />
-          ),
-          h2: ({ node, ...props }) => (
-            <h2 className="text-3xl font-semibold my-3" {...props} />
-          ),
-          h3: ({ node, ...props }) => (
-            <h3 className="text-2xl font-semibold my-2" {...props} />
-          ),
-          p: ({ node, ...props }) => (
-            <p className="text-base text-slate-100-700 my-2" {...props} />
-          ),
-          li: ({ node, ...props }) => (
-            <li className="ml-5 list-disc text-slate-50 my-1" {...props} />
-          ),
-          strong: ({ node, ...props }) => (
-            <strong className="font-bold text-slate-200" {...props} />
-          ),
-        }}
-      >
-        {content}
-      </ReactMarkdown>
+    <div className="max-w-4xl mx-auto p-6  shadow-md rounded-md prose prose-gray overflow-x-hidden">
+      {MarkdownToHtml(content)}
     </div>
   );
 };
