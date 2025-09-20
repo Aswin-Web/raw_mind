@@ -25,23 +25,24 @@ export async function POST(req: Request) {
     const uploadDir = path.join(process.cwd(), "files/assets");
 
     // ✅ Ensure directory exists
-    await mkdir(uploadDir, { recursive: true });
+    // await mkdir(uploadDir, { recursive: true });
 
     const filePath = path.join(uploadDir, filename);
 
     // ✅ Save the file
-    await writeFile(filePath, buffer);
+    // await writeFile(filePath, buffer);
     const textContent = buffer.toString("utf-8"); // ✅ get text
+    // console.log("🚀 ~ POST ~ textContent:", textContent)
 
-    const data = await readFile(filePath, "utf-8");
+    // const data = await readFile(filePath, "utf-8");
 
     const uploadInfo = await prisma.fileConfig.create({
       data: {
         internal_file_name: filename,
         orignal_file_name: original_fileName,
         version: version || "none",
-        raw_data: data,
-        meaning_ful_data: await getResponseFromGemini(data),
+        raw_data: textContent,
+        meaning_ful_data: await getResponseFromGemini(textContent),
       },
     });
     return NextResponse.json({

@@ -77,7 +77,7 @@ const Page = () => {
         <div className="bg-white text-black mt-4 p-2 text-center">
           <input
             type="file"
-            placeholder="Upload a .txt file"
+            placeholder="Upload a .txt file of max size 4kb"
             onChange={handleUpload}
             disabled={isLoading}
             accept=".txt"
